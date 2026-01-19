@@ -1,2 +1,4 @@
 # paper-reading
-最近这段时间实习学会了使用github，看到不少人都把自己读过的论文放到了自己的repo里。于是我也有了这样的想法，把未来研究生阶段读过的paper和summary都放到这个repo里，同时也方便和导师汇报。希望我能坚持下来吧。
+记录我读过的论文。
+
+量化：[Product Quantization for Nearest Neighbor Search](papers/Product%20Quantization%20for%20Nearest%20Neighbor%20Search.md)
