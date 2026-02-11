@@ -1,0 +1,4 @@
+- 计算和存储解耦，有cpu实例和内存实例，cpu实例都cpu计算能力强，内存很小，内存实例的cpu能力差，内存很大。![[d-HNSW-figure2.png]]
+- 代表性索引缓存：先随机采样500个点构建一个3层的HNSW，叫做meta-HNSW，这500个点每个点对应了一个分区。在计算节点只存meta-HNSW。在内存节点存所有的分区构成的HNSW，每个分区构建出来的HNSW叫sub-HNSW![[d-HNSW-figure3.png]]
+- 远程内存中的 RDMA 友好图索引存储布局：RDMA 支持对指定远程内存地址的高效访问。在内存中这么排列：最开始是全局元信息，记录每个sub-hnsw的偏移量，接下来一组一组顺序排列，一个组里有两个sub-hnsw，中间是缓冲区用来放新插入的向量。需要加载一个sub-hnsw的时候就发起一次RDMA_READ 命令读一下这个sub-hnsw和共享缓冲区。如果要加载多个sub-hnsw且它们不连续，就利用doorbell batching一次发出多个PCIe 事务进行读取。![[d-HNSW-figure4.png]]
+- 面向批量查询的数据加载机制：先算出来这一批查询用到的sub-hnsw，然后一个一个sub-hnsw去加载，对用到这一个sub-hnsw的query就去算一下，结果暂时存下来。省的一个一个查询去处理，多次加载同一个sub-hnsw。
